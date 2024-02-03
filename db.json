@@ -1,0 +1,20 @@
+
+{
+
+  "categoria": [
+    {
+     "id": "",
+     "title": ""
+    }
+  ],
+
+  "subcategories": [
+    {
+      "id": "",
+      "idCaregorie": "",
+      "title": ""
+    }
+  ]
+
+
+}

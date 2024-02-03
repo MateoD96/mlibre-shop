@@ -1,0 +1,7 @@
+.categorie:hover > ul {
+  display: block;
+  position: absolute;
+  background-color: rgba(31, 31, 31, 0.992);
+  padding: 1rem;
+  border-radius: 0.2rem;
+}
