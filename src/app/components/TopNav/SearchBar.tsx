@@ -10,7 +10,7 @@ export function SearchBar() {
   const handleChange = (value: string) => setQuery(value);
 
   const handleClick = () => {
-    if (query) push(`search?q=${query.toString()}`);
+    if (query) push(`/search?q=${query.toString()}`);
   };
 
   return (

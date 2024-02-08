@@ -8,7 +8,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useToggle } from "../../hooks";
 import { memo } from "react";
 import Link from "next/link";
-import { SearchBar } from "..";
+import { SearchBar, Wrapper } from "..";
 
 interface Props {
   categories: Datum[];
@@ -27,16 +27,18 @@ interface InfoItems {
 export function LayoutMenu({ children }: { children: React.ReactNode }) {
   return (
     <div className=" w-full bg-yellow-400 h-18">
-      <div className="w-full sm:w-[90%] mx-auto flex justify-between items-center relative p-3">
-        <div className=" ml-7 sm:m-0">
-          <h1 className=" text-5xl">
-            <Link href={"/"}>
-              <SiMercadopago />
-            </Link>
-          </h1>
+      <Wrapper>
+        <div className="flex justify-between items-center relative">
+          <div className=" ml-10  sm:ml-0">
+            <h1 className=" text-5xl">
+              <Link href={"/"}>
+                <SiMercadopago />
+              </Link>
+            </h1>
+          </div>
+          {children}
         </div>
-        {children}
-      </div>
+      </Wrapper>
     </div>
   );
 }
@@ -49,7 +51,7 @@ export const MobileBar = memo(({ categories }: Props) => {
       {/* Btn active menu */}
       <div
         onClick={toggle}
-        className=" z-50 cursor-pointer absolute top-5  left-2 text-2xl"
+        className=" z-50 cursor-pointer absolute top-5  left-0 text-2xl"
       >
         <IoMdMenu />
       </div>
@@ -112,7 +114,9 @@ export const DesktopBar = memo(({ categories }: Props) => {
                   <ul className=" hidden">
                     {category.attributes.sub_categorias?.data.map((subcat) => (
                       <li key={subcat.id} className=" text-white my-2">
-                        <Link href={`/cat/${subcat.id}`}>
+                        <Link
+                          href={`/cat/${subcat.attributes.title.toLowerCase()}`}
+                        >
                           {subcat.attributes.title}
                         </Link>
                       </li>
@@ -167,7 +171,9 @@ function ListItemsMobile({ cat }: { cat: Datum }) {
       >
         {cat.attributes?.sub_categorias?.data.map((subCat) => (
           <li key={subCat.id}>
-            <Link href={`/cat/${subCat.id}`}>{subCat.attributes.title}</Link>
+            <Link href={`/cat/${subCat.attributes.title.toLowerCase()}`}>
+              {subCat.attributes.title}
+            </Link>
           </li>
         ))}
       </ul>

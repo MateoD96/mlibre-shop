@@ -1,14 +1,30 @@
+import { Subcategories } from "./definitions";
 
-
-export const getCategories = async () => {
+const getData = async (edpoint: string) => {
   try {
-   const res = await fetch("http://localhost:1337/api/categorias?populate[sub_categorias]=sub_categorias")
-   const data = await res.json();
-   
-   return data;
-    
-  } catch (error) {
-    console.error(error);
-  }
+    const res = await fetch(edpoint);
+    const data = await res.json();
 
-}
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Ocurrio un error al obtener los datos");
+  }
+};
+
+
+export const api = {
+  baseUrl: "http://localhost:1337/api",
+
+  async getCategories() {
+    const data = await getData(
+      `${this.baseUrl}/categorias?populate[sub_categorias]=sub_categorias`
+    );
+    return data;
+  },
+
+  async getSubcategory(subcat: string) {
+    const data = await getData(`${this.baseUrl}/sub-categorias/${subcat}`);
+    return data as Subcategories;
+  },
+};
