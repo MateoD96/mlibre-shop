@@ -1,8 +1,8 @@
 import { Subcategories } from "./definitions";
 
-const getData = async (edpoint: string) => {
+const getData = async (endpoint: string) => {
   try {
-    const res = await fetch(edpoint);
+    const res = await fetch(endpoint);
     const data = await res.json();
 
     return data;

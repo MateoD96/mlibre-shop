@@ -1,5 +1,5 @@
 import { api } from "@/app/lib/data";
-import { BannerSubcategory } from "./components";
+import { BannerSubcategory, CardsSubcategories } from "./components";
 import { Wrapper } from "@/app/components";
 import Link from "next/link";
 
@@ -50,9 +50,7 @@ export default async function SubCategoryPage({ params }: Props) {
       </BannerSubcategory>
 
       <Wrapper>
-        <main>
-          <div></div>
-        </main>
+        <CardsSubcategories subCategories={data.attributes.subsub_categories} />
       </Wrapper>
     </>
   );

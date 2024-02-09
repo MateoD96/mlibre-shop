@@ -26,7 +26,7 @@ interface InfoItems {
 
 export function LayoutMenu({ children }: { children: React.ReactNode }) {
   return (
-    <div className=" w-full bg-yellow-400 h-18">
+    <div className=" w-full bg-yellow-400 h-18 sticky top-0 z-50">
       <Wrapper>
         <div className="flex justify-between items-center relative">
           <div className=" ml-10  sm:ml-0">
