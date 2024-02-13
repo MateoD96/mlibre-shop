@@ -50,7 +50,10 @@ export default async function SubCategoryPage({ params }: Props) {
       </BannerSubcategory>
 
       <Wrapper>
-        <CardsSubcategories subCategories={data.attributes.subsub_categories} />
+        <CardsSubcategories
+          subcat={params.subcat}
+          subCategories={data.attributes.subsub_categories}
+        />
       </Wrapper>
     </>
   );
