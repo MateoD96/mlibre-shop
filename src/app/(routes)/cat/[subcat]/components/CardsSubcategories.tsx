@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
+  subcat?: string;
   subCategories?: SubsubCategories;
 }
 
-export function CardsSubcategories({ subCategories }: Props) {
+export function CardsSubcategories({ subCategories, subcat }: Props) {
   const elements = subCategories?.data;
 
   return (
@@ -16,7 +17,7 @@ export function CardsSubcategories({ subCategories }: Props) {
         {elements &&
           elements.map(({ id, attributes }) => (
             <Card key={id}>
-              <Link href={`/shop/${attributes.slug}`}>
+              <Link href={`/shop/${subcat}/${attributes.slug}`}>
                 <div className=" relative h-[30vh]">
                   {attributes.url_image.data && (
                     <Image
