@@ -1,3 +1,4 @@
+import { CiCircleRemove } from "react-icons/ci";
 import { apiProducts } from "../lib/data";
 import { Filters } from "./FiltersItems";
 import Link from "next/link";
@@ -16,21 +17,20 @@ export async function FiltersProducts({ filtersParams, subcat }: Props) {
       .join("/");
   };
 
-  console.log(filtersParams);
-
   return (
-    <div>
-      <div>
-        {/* FIXME: name param in view */}
-        {filtersParams.slice(2).map((filter) => (
-          <Link
-            key={filter}
-            href={`/shop/${removeParamUrl(filtersParams, filter)}`}
-          >
-            {filter}
-          </Link>
-        ))}
-      </div>
+    <div className=" order-1 mb-6 sm:mb-0 w-1/5">
+      {/* FIXME: name param in view*/}
+
+      {filtersParams.slice(2).map((filter) => (
+        <Link
+          key={filter}
+          href={`/shop/${removeParamUrl(filtersParams, filter)}`}
+          className=" bg-slate-200 p-1 rounded-xl relative inline-flex items-center text-gray-500 mr-2 mt-2"
+        >
+          <span>{filter}</span>
+          <CiCircleRemove className=" mx-1" />
+        </Link>
+      ))}
 
       {filtersProds && (
         <Filters

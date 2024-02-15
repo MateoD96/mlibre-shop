@@ -5,7 +5,6 @@ import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useToggle } from "@/app/hooks";
 import { FiltrosDatum } from "../lib/definitions";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 interface FiltersItems {
   filtros: FiltrosDatum;
@@ -25,7 +24,7 @@ function FiltersItems({ filtros, filtersParams }: FiltersItems) {
   }
 
   return (
-    <div className=" mt-2">
+    <div className=" mt-2 mr-2">
       <div className=" flex items-center text-[.9rem] mr-2">
         <h4 className=" font-bold">{filtros.attributes.title}</h4>
         <span onClick={toggle} className=" mx-1 sm:hidden cursor-pointer">
@@ -36,11 +35,11 @@ function FiltersItems({ filtros, filtersParams }: FiltersItems) {
       <ul
         className={`${
           active ? "block" : "hidden"
-        } sm:block absolute  sm:relative`}
+        } sm:block absolute  sm:relative z-10 bg-slate-800 text-white sm:text-gray-500 p-1 sm:p-0 sm:bg-white rounded-sm`}
       >
         {filtros.attributes.sub_filtros.data.map((item) => {
           return !filtersParams.includes(item.attributes.slug) ? (
-            <li key={item.id} className="">
+            <li key={item.id} className=" p-1">
               <Link
                 href={`/shop/${filtersParams.join("/")}/${
                   item.attributes.slug
@@ -64,19 +63,15 @@ interface PropsFilters {
 
 export function Filters({ filtros, subcat, filtersParams }: PropsFilters) {
   return (
-    <div>
-      <p className="sm:hidden">Filtros</p>
-
-      <aside className=" relative flex flex-wrap sm:flex-col">
-        {filtros.map((filter) => (
-          <FiltersItems
-            key={filter.id}
-            filtros={filter}
-            subcat={subcat}
-            filtersParams={filtersParams}
-          />
-        ))}
-      </aside>
-    </div>
+    <aside className=" relative flex flex-wrap sm:flex-col">
+      {filtros.map((filter) => (
+        <FiltersItems
+          key={filter.id}
+          filtros={filter}
+          subcat={subcat}
+          filtersParams={filtersParams}
+        />
+      ))}
+    </aside>
   );
 }
