@@ -39,6 +39,7 @@ export default async function ProductsPage({ params }: Props) {
             <ProductsList products={resp} />
             <Pagination pages={resp.meta} params={params.filtersProducts} />
           </div>
+
           <Suspense fallback={<h3 className=" w-1/5">Loading...</h3>}>
             <FiltersProducts
               subcat={subcat}
