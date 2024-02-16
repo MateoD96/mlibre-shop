@@ -1,5 +1,5 @@
 import { Wrapper, Breadcrumbs } from "@/app/components";
-import { Products } from "./components";
+import { ProductsList } from "./components";
 import { Suspense } from "react";
 import { apiProducts } from "./lib/data";
 import { FiltersProducts } from "./components";
@@ -8,16 +8,14 @@ interface Props {
   params: {
     filtersProducts: string[];
   };
-  searchParams: {
-    query: string;
-  };
 }
 
-export default async function ProductsPage({ params, searchParams }: Props) {
-  const query = searchParams.query || "";
+export default async function ProductsPage({ params }: Props) {
   const resp = await apiProducts.getProducts(params.filtersProducts);
   //we get the subcategory related to the products to get the filters related to the subcategory
   const subcat = resp.data[0]?.attributes.subsub_categorie.data.attributes.slug;
+
+  if (resp.data.length === 0) return <h3>No se obtubieron resultados</h3>;
 
   return (
     <div>
@@ -37,13 +35,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
         />
 
         <div className=" flex flex-col sm:flex-row">
-          <div className=" order-2 md:w-3/4">
-            {resp &&
-              resp.data?.map((data) => (
-                <h3 key={data.id}>{data.attributes.title}</h3>
-              ))}
-          </div>
-
+          <ProductsList products={resp} />
           <Suspense fallback={<h3 className=" w-1/5">Loading...</h3>}>
             <FiltersProducts
               subcat={subcat}

@@ -35,7 +35,7 @@ function FiltersItems({ filtros, filtersParams }: FiltersItems) {
       <ul
         className={`${
           active ? "block" : "hidden"
-        } sm:block absolute  sm:relative z-10 bg-slate-800 text-white sm:text-gray-500 p-1 sm:p-0 sm:bg-white rounded-sm`}
+        } sm:block absolute  sm:relative z-10 bg-slate-800 text-white sm:text-gray-500 p-1 sm:p-0 sm:bg-transparent rounded-sm`}
       >
         {filtros.attributes.sub_filtros.data.map((item) => {
           return !filtersParams.includes(item.attributes.slug) ? (

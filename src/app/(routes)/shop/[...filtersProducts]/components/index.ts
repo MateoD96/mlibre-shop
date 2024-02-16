@@ -1,3 +1,3 @@
 export { FiltersProducts } from "./FiltersProducts";
-export { Products } from "./Products";
+export { ProductsList } from "./ProductsList";
 export { Filters } from "./FiltersItems";
