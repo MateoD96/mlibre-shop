@@ -19,6 +19,7 @@ export async function FiltersProducts({ filtersParams, subcat }: Props) {
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
     <div className=" order-1 mb-6 sm:mb-0 sm:w-[27%] w-full">
       {/* FIXME: name param in view*/}
 
@@ -49,6 +50,23 @@ export async function FiltersProducts({ filtersParams, subcat }: Props) {
         </Link>
       ))}
 >>>>>>> 696e942 (filters products)
+=======
+    <div className=" order-1 mb-6 sm:mb-0 sm:w-[27%] w-full">
+      {/* FIXME: name param in view*/}
+
+      <div>
+        {filtersParams.slice(2).map((filter) => (
+          <Link
+            key={filter}
+            href={`/shop/${removeParamUrl(filtersParams, filter)}`}
+            className=" bg-slate-200 p-1 rounded-xl relative inline-flex items-center text-gray-500 mr-2 mt-2"
+          >
+            <span>{filter}</span>
+            <CiCircleRemove className=" mx-1" />
+          </Link>
+        ))}
+      </div>
+>>>>>>> 815dceb (get products)
 
       {filtersProds && (
         <Filters
