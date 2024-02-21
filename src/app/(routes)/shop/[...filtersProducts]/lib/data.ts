@@ -13,17 +13,23 @@ export const apiProducts = {
     return filtros.data;
   },
 
-  async getProducts(params: string[], paramsQuery?: string[]) {
+  async getProducts(params: string[]) {
+    const regex = /index[^\/]+$/;
+    const pageInfo = params.join("/").match(regex)?.[0]?.match(/\d+/g) ?? [];
+    const p = params.filter((p) => !p.includes("indexPage"));
+
     const query =
-      params.length > 2
-        ? params.slice(2).reduce((acc, param, i) => {
+      p.length > 2
+        ? p.slice(2).reduce((acc, param, i) => {
             return acc.concat(
               `&filters[$and][${i}][sub_filtros][slug][$eq]=${param}`
             );
           }, `${this.baseUrl}${params[1]}`)
         : `${this.baseUrl}${params[1]}`;
 
-    return await getData<Products>(query);
+    return await getData<Products>(
+      query.concat(`&pagination[page]=${pageInfo[0] || 1}`)
+    );
   },
 };
 

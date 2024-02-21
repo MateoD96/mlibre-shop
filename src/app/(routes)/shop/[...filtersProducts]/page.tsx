@@ -2,7 +2,7 @@ import { Wrapper, Breadcrumbs } from "@/app/components";
 import { ProductsList } from "./components";
 import { Suspense } from "react";
 import { apiProducts } from "./lib/data";
-import { FiltersProducts } from "./components";
+import { FiltersProducts, Pagination } from "./components";
 
 interface Props {
   params: {
@@ -35,7 +35,10 @@ export default async function ProductsPage({ params }: Props) {
         />
 
         <div className=" flex flex-col sm:flex-row">
-          <ProductsList products={resp} />
+          <div className="order-2 md:w-3/4 bg-white rounded-md py-4 w-full my-4">
+            <ProductsList products={resp} />
+            <Pagination pages={resp.meta} params={params.filtersProducts} />
+          </div>
           <Suspense fallback={<h3 className=" w-1/5">Loading...</h3>}>
             <FiltersProducts
               subcat={subcat}

@@ -8,7 +8,7 @@ interface Props {
 
 export async function ProductsList({ products }: Props) {
   return (
-    <div className=" order-2 md:w-3/4 bg-white rounded-md py-4 w-full my-4">
+    <div>
       {products &&
         products.data?.map((data) => (
           <div
