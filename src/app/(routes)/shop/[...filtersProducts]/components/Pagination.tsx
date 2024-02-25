@@ -5,7 +5,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { Meta } from "../lib/definitions";
 import { usePathname } from "next/navigation";
-import { newPage } from "../lib/utils";
+import { replacePageInUrl } from "../lib/utils";
 
 interface Props {
   pages: Meta;
@@ -80,7 +80,7 @@ function PaginationNumber({
   return isActive || position === "middle" ? (
     <div className={className}>{page}</div>
   ) : (
-    <Link href={newPage(pathname, page)} className={className}>
+    <Link href={replacePageInUrl(pathname, page)} className={className}>
       {page}
     </Link>
   );
@@ -117,7 +117,7 @@ function PaginationArrow({
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link href={newPage(pathname, page)} className={className}>
+    <Link href={replacePageInUrl(pathname, page)} className={className}>
       {icon}
     </Link>
   );

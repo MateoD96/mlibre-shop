@@ -1,4 +1,4 @@
-export const newPage = (pathname: string, page: number) => {
+export const replacePageInUrl = (pathname: string, page: number) => {
   const p = pathname.match(/indexPage_\d+/g);
   let newUrl = pathname;
   if (p) {

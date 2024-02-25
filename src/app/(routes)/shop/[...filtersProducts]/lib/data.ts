@@ -16,11 +16,11 @@ export const apiProducts = {
   async getProducts(params: string[]) {
     const regex = /index[^\/]+$/;
     const pageInfo = params.join("/").match(regex)?.[0]?.match(/\d+/g) ?? [];
-    const p = params.filter((p) => !p.includes("indexPage"));
+    const paramsQuery = params.filter((p) => !p.includes("indexPage"));
 
     const query =
-      p.length > 2
-        ? p.slice(2).reduce((acc, param, i) => {
+      paramsQuery.length > 2
+        ? paramsQuery.slice(2).reduce((acc, param, i) => {
             return acc.concat(
               `&filters[$and][${i}][sub_filtros][slug][$eq]=${param}`
             );
