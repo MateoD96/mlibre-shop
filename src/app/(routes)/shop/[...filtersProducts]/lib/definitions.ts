@@ -1,7 +1,6 @@
 interface Image {
   data: DataImage;
 }
-<<<<<<< HEAD
 
 interface DataImage {
   id: string | number;
@@ -83,8 +82,6 @@ export interface Pagination {
 }
 
 ///////////////////////////
-=======
->>>>>>> 815dceb (get products)
 
 interface DataImage {
   id: string | number;
