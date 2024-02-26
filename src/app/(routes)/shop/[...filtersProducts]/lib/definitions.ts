@@ -34,11 +34,15 @@ interface Format {
 }
 
 export interface Products {
-  data: Datum[];
+  data: DatumProduct[];
   meta: Meta;
 }
 
-export interface Datum {
+export interface Product {
+  data: DatumProduct;
+}
+
+export interface DatumProduct {
   id: number;
   attributes: DatumAttributes;
 }
@@ -130,9 +134,7 @@ export interface DatumAttributes {
   price: number;
   stock: number;
   descuento: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
+  slug: string;
   marca: string;
   image: Image;
   subsub_categorie: SubsubCategorie;
@@ -142,6 +144,17 @@ export interface SubsubCategorie {
   data: Data;
 }
 
+interface subCategoria {
+  sub_categoria: {
+    data: {
+      id: number;
+      attributes: {
+        slug: string;
+      };
+    };
+  };
+}
+
 export interface Data {
   id: number;
   attributes: DataAttributes;
@@ -149,6 +162,7 @@ export interface Data {
 
 export interface DataAttributes {
   slug: string;
+  subCategoria?: subCategoria;
 }
 
 export interface Meta {
