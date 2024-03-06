@@ -1,5 +1,6 @@
 import { Breadcrumbs, Wrapper } from "@/app/components";
 import { apiProduct } from "./utils/data";
+import { Product } from "./components";
 
 interface Props {
   params: {
@@ -14,5 +15,23 @@ export default async function ProductPage({ params }: Props) {
 
   if (!data) return <h3>No se obtuvieron resultados</h3>;
 
-  return <Wrapper>{data && data.attributes.title}</Wrapper>;
+  return (
+    <Wrapper>
+      <Breadcrumbs
+        breadcrumbs={[
+          {
+            label:
+              data.attributes.subsub_categorie.data.attributes.sub_categoria
+                .data.attributes.title,
+            href: `/cat/${data.attributes.subsub_categorie.data.attributes.sub_categoria.data.attributes.slug}`,
+          },
+          {
+            label: data.attributes.subsub_categorie.data.attributes.slug,
+            href: `/shop/${data.attributes.subsub_categorie.data.attributes.sub_categoria.data.attributes.slug}/${data.attributes.subsub_categorie.data.attributes.slug}`,
+          },
+        ]}
+      />
+      <Product product={data} />
+    </Wrapper>
+  );
 }

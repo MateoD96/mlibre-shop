@@ -72,6 +72,7 @@ export interface Data {
 
 export interface DataAttributes {
   slug: string;
+  sub_categoria: subCategoria;
 }
 
 export interface Meta {
@@ -145,12 +146,11 @@ export interface SubsubCategorie {
 }
 
 interface subCategoria {
-  sub_categoria: {
-    data: {
-      id: number;
-      attributes: {
-        slug: string;
-      };
+  data: {
+    id: number;
+    attributes: {
+      slug: string;
+      title: string;
     };
   };
 }
@@ -162,7 +162,7 @@ export interface Data {
 
 export interface DataAttributes {
   slug: string;
-  subCategoria?: subCategoria;
+  title: string;
 }
 
 export interface Meta {
