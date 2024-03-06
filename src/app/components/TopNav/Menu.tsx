@@ -77,8 +77,12 @@ export const MobileBar = memo(({ categories }: Props) => {
             <ul className=" list-none h-[40vh]">
               <InfoNav
                 items={[
-                  { title: "Crear cuenta", styles: "mb-2", href: "#" },
-                  { title: "Acceder", styles: "mb-2", href: "#" },
+                  {
+                    title: "Crear cuenta",
+                    styles: "mb-2",
+                    href: "/hub/registration",
+                  },
+                  { title: "Acceder", styles: "mb-2", href: "/hub/login" },
                   { title: "Tus compras", styles: "", href: "#" },
                 ]}
               />
@@ -133,10 +137,10 @@ export const DesktopBar = memo(({ categories }: Props) => {
           items={[
             {
               title: "Crear cuenta",
-              href: "#",
+              href: "/hub/registration",
               styles: "mr-3 ",
             },
-            { title: "Acceder", href: "#", styles: "mr-3" },
+            { title: "Acceder", href: "/hub/login", styles: "mr-3" },
             { title: "Tus compras", href: "#", styles: "mr-3" },
           ]}
         />
