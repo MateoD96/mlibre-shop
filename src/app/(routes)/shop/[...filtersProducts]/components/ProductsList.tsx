@@ -16,7 +16,7 @@ export async function ProductsList({ products }: Props) {
             className=" w-full my-3 border-b-[1.5px] pl-4 pb-4 flex"
           >
             <div className=" relative w-2/5 h-[12vh] sm:h-[15vh] lg:h-[20vh] sm:w-[30%]">
-              <Link href={"#"}>
+              <Link href={`/${data.attributes.slug}`}>
                 <Image
                   className=" object-cover object-center"
                   src={data.attributes.image.data?.attributes.formats.large.url}
