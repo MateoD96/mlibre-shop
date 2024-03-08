@@ -3,6 +3,7 @@ import { MdEmail } from "react-icons/md";
 import { FaClipboardUser } from "react-icons/fa6";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { LabelForm } from "../components";
+import { registerAction } from "../lib/actions";
 
 export default function RegistrationPage() {
   return (
@@ -11,7 +12,7 @@ export default function RegistrationPage() {
         Completa los datos para crear tu cuenta
       </h3>
 
-      <form className=" mt-6">
+      <form action={registerAction} className=" mt-6">
         <LabelForm type="email" name="email" title="Agrega tu e-mail" required>
           <MdEmail className="text-blue-500 text-xl" />
         </LabelForm>
