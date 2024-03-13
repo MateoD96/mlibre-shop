@@ -1,4 +1,4 @@
-import { Subcategories } from "./definitions";
+import { Me, Subcategories } from "./definitions";
 import { getData } from "./utils";
 
 export const api = {
@@ -12,7 +12,17 @@ export const api = {
   },
 
   async getSubcategory(subcat: string) {
-    const data = await getData(`${this.baseUrl}/sub-categorias/${subcat}`);
-    return data as Subcategories;
+    const data = await getData<Subcategories>(
+      `${this.baseUrl}/sub-categorias/${subcat}`
+    );
+    return data;
+  },
+
+  async getMe(currentUser: string) {
+    const data = await getData<Me>(`${this.baseUrl}/users/me`, {
+      headers: { Authorization: `Bearer ${currentUser}` },
+    });
+
+    return data;
   },
 };

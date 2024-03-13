@@ -1,30 +1,24 @@
 "use server";
 
+import { Me } from "@/app/lib/definitions";
+import { postData } from "@/app/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { createNewCart } from "../../cart/lib/actions";
+
+interface Register {
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface Login {
+  identifier: string;
+  password: string;
+}
 
 const apiAuth = {
-  baseUrl: "http://localhost:1337/api/auth/local",
-  // TODO: recibir los datos previamente validados
-
-  async post(data: FormData, url?: string) {
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    };
-    const rawFormData = Object.fromEntries(data.entries());
-
-    try {
-      const resp = await fetch(`${this.baseUrl}/${url || ""}`, {
-        ...options,
-        body: JSON.stringify(rawFormData),
-      });
-      return await resp.json();
-    } catch (error) {
-      console.error(error);
-      return;
-    }
-  },
+  baseUrl: `${process.env.URL_LOCAL}/auth/local`,
 
   cookieAuth(jwt: string) {
     if (jwt) {
@@ -40,12 +34,28 @@ const apiAuth = {
 
 export async function registerAction(formData: FormData) {
   //TODO: validate
-  const { jwt, error } = await apiAuth.post(formData, "register");
+  const data: Register = {
+    username: formData.get("username") as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
+
+  const { jwt, user, error } = await postData(
+    data,
+    `${apiAuth.baseUrl}/register`
+  );
+
+  const me: Me = user;
 
   if (!error) {
     apiAuth.cookieAuth(jwt);
+
+    //create cart user register
+    await createNewCart(me.id, jwt);
     redirect("/hub/my-profile");
   }
+
+  console.log(error);
 
   //TODO: indicar el error de autenticación al usuario
 }
@@ -54,7 +64,12 @@ export async function registerAction(formData: FormData) {
 
 export async function loginAction(formData: FormData) {
   //TODO: Validate
-  const { jwt, error } = await apiAuth.post(formData);
+  const loginDat: Login = {
+    identifier: formData.get("identifier") as string,
+    password: formData.get("password") as string,
+  };
+
+  const { jwt, error } = await postData(loginDat, apiAuth.baseUrl);
 
   if (!error) {
     apiAuth.cookieAuth(jwt);
