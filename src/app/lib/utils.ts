@@ -1,12 +1,71 @@
-export const getData = async <T>(endpoint: string) => {
-  try {
-    const res = await fetch(endpoint);
-    const data = await res.json();
-    
-    return data as T;
+interface Headers {
+  "Content-Type"?: string;
+  Authorization?: string;
+}
 
+export const getData = async <T>(endpoint: string, options?: Headers) => {
+  try {
+    const res = await fetch(endpoint, { headers: { ...options } });
+
+    if (!res.ok) {
+      throw new Error(`Ups,Ocurrio un error al obtener los datos`);
+    }
+
+    const data = await res.json();
+
+    return data as T;
   } catch (error) {
     console.log(error);
     throw new Error("Ocurrio un error al obtener los datos");
   }
+};
+
+// TODO: recibir los datos previamente validados
+
+export const postData = () => {
+  const defaultOptions = {
+    method: "",
+    headers: { "Content-Type": "application/json" },
+    body: "JSON DATA",
+  };
+
+  const fetching = async (endpoint: string) => {
+    try {
+      const resp = await fetch(`${endpoint || ""}`, defaultOptions);
+      return await resp.json();
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error posting data");
+    }
+  };
+
+  const insert = async (
+    endpoint: string,
+    data: unknown,
+    comingOptions?: Headers
+  ) => {
+    defaultOptions.method = "POST";
+    defaultOptions.body = JSON.stringify(data);
+    const headers = { ...defaultOptions.headers, ...comingOptions };
+    defaultOptions.headers = headers;
+
+    return await fetching(endpoint);
+  };
+
+  const update = async (
+    endpoint: string,
+    data: unknown,
+    comingOptions?: Headers
+  ) => {
+    defaultOptions.method = "PUT";
+    defaultOptions.body = JSON.stringify(data);
+    const headers = { ...defaultOptions.headers, ...comingOptions };
+    defaultOptions.headers = headers;
+    return await fetching(endpoint);
+  };
+
+  return {
+    insert,
+    update,
+  };
 };

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { DatumProduct } from "../../shop/[...filtersProducts]/lib/definitions";
 import { useState } from "react";
 import { useToggle } from "@/app/hooks";
-import Link from "next/link";
+import { insertNewItemCart } from "../../cart/lib/actions";
 
 interface PropsProd {
   product: DatumProduct;
@@ -54,7 +54,7 @@ export function Product({ product }: PropsProd) {
         </p>
         <div className=" mb-2">
           {prodInfo.stock > 0 ? (
-            <BuyProduct prodInfo={prodInfo} />
+            <BuyProduct prodInfo={prodInfo} prodId={product.id} />
           ) : (
             <span className=" text-red-500">Producto Agotado</span>
           )}
@@ -64,8 +64,20 @@ export function Product({ product }: PropsProd) {
   );
 }
 
-function BuyProduct({ prodInfo }: { prodInfo: { stock: number } }) {
+function BuyProduct({
+  prodInfo,
+  prodId,
+}: {
+  prodInfo: { stock: number; price: number };
+  prodId: number;
+}) {
   const [buyCant, setBuyCant] = useState(1);
+  const newItemAction = insertNewItemCart.bind(
+    null,
+    { prodId, stock: prodInfo.stock, price: prodInfo.price },
+    buyCant
+  );
+
   return (
     <>
       <div>
@@ -80,19 +92,27 @@ function BuyProduct({ prodInfo }: { prodInfo: { stock: number } }) {
       </div>
 
       {/* Buttons actions*/}
+
+      {/* Action buy product */}
       <div className=" mt-6">
-        <Link
-          className="p-2 bg-blue-500 block mb-3 text-center rounded-md text-white"
-          href={"#"}
-        >
-          Comprar
-        </Link>
-        <Link
-          className=" rounded-md p-2 bg-blue-500 block text-center text-white"
-          href={"#"}
-        >
-          Añadir al carrito
-        </Link>
+        <form action={""}>
+          <button
+            type="submit"
+            className="p-2 bg-blue-500 block mb-3 w-full text-center rounded-md text-white"
+          >
+            Comprar
+          </button>
+        </form>
+
+        {/* Action add Cart */}
+        <form action={newItemAction}>
+          <button
+            type="submit"
+            className=" rounded-md p-2 bg-blue-500 block w-full text-center text-white"
+          >
+            Añadir al carrito
+          </button>
+        </form>
       </div>
     </>
   );
@@ -153,7 +173,7 @@ function MoreSixUnits({
   const [cant, setCant] = useState(0);
 
   const validateCant = () => {
-    if (cant <= 0 || cant == null) {
+    if (cant <= 0 || !cant) {
       setBuyCant(1);
     } else if (cant > stock) {
       setErrorCant("No hay suficiente stock");

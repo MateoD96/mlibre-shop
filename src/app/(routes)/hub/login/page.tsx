@@ -1,14 +1,20 @@
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { FormWraper, LabelForm } from "../components";
+import { loginAction } from "../lib/actions";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: { atc: string };
+}) {
   return (
     <FormWraper>
-      <h3 className="text-center text-lg font-medium">
+      <h3 className="text-center text-xl font-medium">
+        {searchParams.atc === "true" ? "Hola,para agregar al carrito " : ""}
         Ingresa tu e-mail o nombre de usuario
       </h3>
-      <form className="mt-6">
+      <form action={loginAction} className="mt-6">
         <LabelForm
           type="text"
           name="identifier"

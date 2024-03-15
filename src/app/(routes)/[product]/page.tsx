@@ -1,5 +1,5 @@
 import { Breadcrumbs, Wrapper } from "@/app/components";
-import { apiProduct } from "./utils/data";
+import { apiProduct } from "./lib/data";
 import { Product } from "./components";
 
 interface Props {
