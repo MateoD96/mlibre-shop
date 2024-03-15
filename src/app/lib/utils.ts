@@ -1,13 +1,11 @@
 interface Headers {
-  headers: {
-    Authorization?: string;
-    "Content-Type"?: string;
-  };
+  "Content-Type"?: string;
+  Authorization?: string;
 }
 
 export const getData = async <T>(endpoint: string, options?: Headers) => {
   try {
-    const res = await fetch(endpoint, options);
+    const res = await fetch(endpoint, { headers: { ...options } });
 
     if (!res.ok) {
       throw new Error(`Ups,Ocurrio un error al obtener los datos`);
@@ -23,28 +21,51 @@ export const getData = async <T>(endpoint: string, options?: Headers) => {
 };
 
 // TODO: recibir los datos previamente validados
-export const postData = async (
-  data: unknown,
-  url: string,
-  options?: Headers
-) => {
-  const headers = {
-    "Content-Type": "application/json",
-    ...options?.headers,
-  };
 
+export const postData = () => {
   const defaultOptions = {
-    method: "POST",
-    headers,
-    body: JSON.stringify(data),
+    method: "",
+    headers: { "Content-Type": "application/json" },
+    body: "JSON DATA",
   };
 
-  try {
-    const resp = await fetch(`${url || ""}`, defaultOptions);
+  const fetching = async (endpoint: string) => {
+    try {
+      const resp = await fetch(`${endpoint || ""}`, defaultOptions);
+      return await resp.json();
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error posting data");
+    }
+  };
 
-    return await resp.json();
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error posting data");
-  }
+  const insert = async (
+    endpoint: string,
+    data: unknown,
+    comingOptions?: Headers
+  ) => {
+    defaultOptions.method = "POST";
+    defaultOptions.body = JSON.stringify(data);
+    const headers = { ...defaultOptions.headers, ...comingOptions };
+    defaultOptions.headers = headers;
+
+    return await fetching(endpoint);
+  };
+
+  const update = async (
+    endpoint: string,
+    data: unknown,
+    comingOptions?: Headers
+  ) => {
+    defaultOptions.method = "PUT";
+    defaultOptions.body = JSON.stringify(data);
+    const headers = { ...defaultOptions.headers, ...comingOptions };
+    defaultOptions.headers = headers;
+    return await fetching(endpoint);
+  };
+
+  return {
+    insert,
+    update,
+  };
 };

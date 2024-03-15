@@ -2,7 +2,7 @@ import { Me, Subcategories } from "./definitions";
 import { getData } from "./utils";
 
 export const api = {
-  baseUrl: "http://localhost:1337/api",
+  baseUrl: `${process.env.URL_LOCAL}`,
 
   async getCategories() {
     const data = await getData(
@@ -18,10 +18,12 @@ export const api = {
     return data;
   },
 
-  async getMe(currentUser: string) {
-    const data = await getData<Me>(`${this.baseUrl}/users/me`, {
-      headers: { Authorization: `Bearer ${currentUser}` },
-    });
+  async getMe(currentUserToken: string, paramsUrl?: string) {
+    const data = await getData<Me>(
+      `${this.baseUrl}/users/me${paramsUrl || ""}`,
+
+      { Authorization: `Bearer ${currentUserToken}` }
+    );
 
     return data;
   },

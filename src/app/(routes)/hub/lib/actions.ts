@@ -33,6 +33,7 @@ const apiAuth = {
 };
 
 export async function registerAction(formData: FormData) {
+  const { insert } = postData();
   //TODO: validate
   const data: Register = {
     username: formData.get("username") as string,
@@ -40,9 +41,9 @@ export async function registerAction(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { jwt, user, error } = await postData(
-    data,
-    `${apiAuth.baseUrl}/register`
+  const { jwt, user, error } = await insert(
+    `${apiAuth.baseUrl}/register`,
+    data
   );
 
   const me: Me = user;
@@ -63,13 +64,15 @@ export async function registerAction(formData: FormData) {
 /////////////////////////////////////////
 
 export async function loginAction(formData: FormData) {
+  const { insert } = postData();
+
   //TODO: Validate
   const loginDat: Login = {
     identifier: formData.get("identifier") as string,
     password: formData.get("password") as string,
   };
 
-  const { jwt, error } = await postData(loginDat, apiAuth.baseUrl);
+  const { jwt, error } = await insert(apiAuth.baseUrl, loginDat);
 
   if (!error) {
     apiAuth.cookieAuth(jwt);

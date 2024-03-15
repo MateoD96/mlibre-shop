@@ -83,12 +83,12 @@ export const MobileBar = memo(({ categories }: Props) => {
                     href: "/hub/registration",
                   },
                   { title: "Acceder", styles: "mb-2", href: "/hub/login" },
-                  { title: "Tus compras", styles: "", href: "#" },
+                  { title: "Tus compras", styles: "", href: "/cart" },
                 ]}
               />
 
               <li className="my-3 text-xl">
-                <Link href={"#"}>
+                <Link href={"/cart"}>
                   <FaCartShopping />
                 </Link>
               </li>
@@ -141,11 +141,11 @@ export const DesktopBar = memo(({ categories }: Props) => {
               styles: "mr-3 ",
             },
             { title: "Acceder", href: "/hub/login", styles: "mr-3" },
-            { title: "Tus compras", href: "#", styles: "mr-3" },
+            { title: "Tus compras", href: "/cart", styles: "mr-3" },
           ]}
         />
         <li className="my-3 text-xl">
-          <Link href={"#"}>
+          <Link href={"/cart"}>
             <FaCartShopping />
           </Link>
         </li>
