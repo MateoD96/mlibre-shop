@@ -3,9 +3,24 @@ interface Headers {
   Authorization?: string;
 }
 
-export const getData = async <T>(endpoint: string, options?: Headers) => {
+interface CacheOptions {
+  cache?: string;
+  next?: {
+    revalidate?: number;
+    tags?: string[];
+  };
+}
+
+export const getData = async <T>(
+  endpoint: string,
+  options?: Headers,
+  cacheOpt?: CacheOptions
+) => {
   try {
-    const res = await fetch(endpoint, { headers: { ...options } });
+    const res = await fetch(endpoint, {
+      [cacheOpt?.cache ? "cache" : "next"]: cacheOpt?.next || cacheOpt?.cache,
+      headers: { ...options },
+    });
 
     if (!res.ok) {
       throw new Error(`Ups,Ocurrio un error al obtener los datos`);
@@ -68,4 +83,22 @@ export const postData = () => {
     insert,
     update,
   };
+};
+
+export const deleteData = async (endpoint: string, headers?: Headers) => {
+  try {
+    const res = await fetch(endpoint, {
+      method: "DELETE",
+      headers: { ...headers },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error fetching ${endpoint}`);
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    throw new Error("Error deleting data");
+  }
 };

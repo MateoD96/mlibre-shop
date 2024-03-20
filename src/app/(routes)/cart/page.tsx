@@ -12,5 +12,13 @@ export default async function CartPage() {
       "?populate[carrito][populate][cart_items][populate][producto][populate][image][fields][0]=formats"
     ));
 
-  return <Wrapper>{me && <Cart items={me.carrito.cart_items} />}</Wrapper>;
+  return (
+    <Wrapper>
+      {me && (
+        <div className=" flex flex-col md:flex-row mt-6">
+          <Cart items={me.carrito.cart_items} token={currentUserToken} />
+        </div>
+      )}
+    </Wrapper>
+  );
 }

@@ -21,8 +21,8 @@ export const api = {
   async getMe(currentUserToken: string, paramsUrl?: string) {
     const data = await getData<Me>(
       `${this.baseUrl}/users/me${paramsUrl || ""}`,
-
-      { Authorization: `Bearer ${currentUserToken}` }
+      { Authorization: `Bearer ${currentUserToken}` },
+      { next: { tags: ["me"] } }
     );
 
     return data;
