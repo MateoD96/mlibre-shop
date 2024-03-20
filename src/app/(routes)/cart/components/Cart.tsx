@@ -1,6 +1,5 @@
 import { CartItem } from "@/app/lib/definitions";
-import { ItemCart } from "./CartItem";
-import { BuySummary } from "./BuySummary";
+import { ItemCart, BuySummary } from "./index";
 
 interface CartProps {
   items: CartItem[];

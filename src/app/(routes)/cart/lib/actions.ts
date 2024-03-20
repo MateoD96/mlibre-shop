@@ -110,3 +110,26 @@ export async function deleteItemCart(id: number, token: string) {
   });
   revalidateTag("me");
 }
+
+export async function operationsQty(
+  item: CartItem,
+  token: string,
+  operation: string
+) {
+  const { update } = postData();
+
+  const updated = {
+    data: {
+      cantidad:
+        operation === "increment" ? (item.cantidad += 1) : (item.cantidad -= 1),
+      subtotal: item.cantidad * item.producto.price,
+    },
+  };
+
+  if (item.cantidad <= item.producto.stock && item.cantidad > 0) {
+    await update(`${process.env.URL_LOCAL}/cart-items/${item.id}`, updated, {
+      Authorization: `Bearer ${token}`,
+    });
+    revalidateTag("me");
+  }
+}

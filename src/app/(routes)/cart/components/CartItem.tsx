@@ -1,10 +1,9 @@
 import { CartItem } from "@/app/lib/definitions";
 import Image from "next/image";
-import { ActionsItem } from "./ActionsItem";
+import { ActionsItem, QtyUpdate } from "./index";
 
-export function ItemCart({ item,token }: { item: CartItem,token: string}) {
+export function ItemCart({ item, token }: { item: CartItem; token: string }) {
   const img = item.producto.image.formats.thumbnail;
-
   return (
     <div className=" min-h-[20vh] bg-white p-2 mb-4 flex items-center">
       <div className="relative w-[4rem] h-[8vh] md:w-[7rem] md:h-[12vh]">
@@ -24,7 +23,7 @@ export function ItemCart({ item,token }: { item: CartItem,token: string}) {
           <ActionsItem item={item} token={token} />
         </div>
 
-        <div>{item.cantidad}</div>
+        <QtyUpdate item={item} token={token}/>
 
         <div>
           <p>{item.subtotal}</p>
