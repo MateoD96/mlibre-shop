@@ -21,11 +21,12 @@ export function LabelForm({
           <span className=" ml-2">{title}</span>
         </div>
       </label>
+
       <input
         className="outline-none border-2 border-yellow-100 px-2 py-1 rounded-md"
         type={type}
-        name={name}
         id={name}
+        name={name}
         required={required}
       />
     </div>

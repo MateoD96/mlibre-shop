@@ -80,4 +80,7 @@ export async function loginAction(formData: FormData) {
   }
 }
 
-export async function logoutAction() {}
+export async function logoutAction() {
+  cookies().delete("currentUser");
+  redirect("/signup");
+}

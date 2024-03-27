@@ -1,4 +1,5 @@
 "use client";
+
 import styles from "../styles.module.css";
 import { Datum } from "../../lib/definitions";
 import { IoMdMenu } from "react-icons/io";
@@ -6,11 +7,14 @@ import { FaArrowAltCircleDown, FaArrowAltCircleRight } from "react-icons/fa";
 import { SiMercadopago } from "react-icons/si";
 import { FaCartShopping } from "react-icons/fa6";
 import { useToggle } from "../../hooks";
-import { memo } from "react";
+import { memo, useContext } from "react";
 import Link from "next/link";
 import { SearchBar, Wrapper } from "..";
+import CartContext from "@/app/context/cartCtx";
+import { logoutAction } from "@/app/(routes)/hub/lib/actions";
 
 interface Props {
+  userVerify: void | "" | { jti: string; iat: number } | undefined;
   categories: Datum[];
 }
 
@@ -43,7 +47,7 @@ export function LayoutMenu({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const MobileBar = memo(({ categories }: Props) => {
+export const MobileBar = memo(({ categories, userVerify }: Props) => {
   const { active, toggle } = useToggle();
 
   return (
@@ -75,23 +79,45 @@ export const MobileBar = memo(({ categories }: Props) => {
             </ul>
 
             <ul className=" list-none h-[40vh]">
-              <InfoNav
-                items={[
-                  {
-                    title: "Crear cuenta",
-                    styles: "mb-2",
-                    href: "/hub/registration",
-                  },
-                  { title: "Acceder", styles: "mb-2", href: "/hub/login" },
-                  { title: "Tus compras", styles: "", href: "/cart" },
-                ]}
-              />
+              {!userVerify ? (
+                <InfoNav
+                  items={[
+                    {
+                      title: "Crear cuenta",
+                      styles: "mb-2",
+                      href: "/hub/registration",
+                    },
+                    { title: "Acceder", styles: "mb-2", href: "/hub/login" },
+                  ]}
+                />
+              ) : (
+                <>
+                  <InfoNav
+                    items={[
+                      {
+                        title: "Tus Compras",
+                        styles: "mb-2",
+                        href: "/cart",
+                      },
+                      {
+                        title: "Mi Perfil",
+                        styles: "mb-2",
+                        href: "/hub/my-profile",
+                      },
+                    ]}
+                  />
 
-              <li className="my-3 text-xl">
-                <Link href={"/cart"}>
-                  <FaCartShopping />
-                </Link>
-              </li>
+                  <li className="my-3 text-xl">
+                    <Link href={"/cart"}>
+                      <FaCartShopping />
+                    </Link>
+                  </li>
+
+                  <form action={logoutAction}>
+                    <button>Cerrar Sesión</button>
+                  </form>
+                </>
+              )}
             </ul>
           </nav>
         </div>
@@ -100,7 +126,8 @@ export const MobileBar = memo(({ categories }: Props) => {
   );
 });
 
-export const DesktopBar = memo(({ categories }: Props) => {
+export const DesktopBar = memo(({ categories, userVerify }: Props) => {
+  const { cartItemsN } = useContext(CartContext);
   return (
     <>
       <div className=" hidden md:flex flex-col">
@@ -133,22 +160,46 @@ export const DesktopBar = memo(({ categories }: Props) => {
       </div>
 
       <ul className=" hidden  md:flex list-none items-center text-gray-800">
-        <InfoNav
-          items={[
-            {
-              title: "Crear cuenta",
-              href: "/hub/registration",
-              styles: "mr-3 ",
-            },
-            { title: "Acceder", href: "/hub/login", styles: "mr-3" },
-            { title: "Tus compras", href: "/cart", styles: "mr-3" },
-          ]}
-        />
-        <li className="my-3 text-xl">
-          <Link href={"/cart"}>
-            <FaCartShopping />
-          </Link>
-        </li>
+        {!userVerify ? (
+          <InfoNav
+            items={[
+              {
+                title: "Crear cuenta",
+                styles: "mb-2",
+                href: "/hub/registration",
+              },
+              { title: "Acceder", styles: "mb-2", href: "/hub/login" },
+            ]}
+          />
+        ) : (
+          <>
+            <InfoNav
+              items={[
+                {
+                  title: "Tus Compras",
+                  styles: "mb-2",
+                  href: "/cart",
+                },
+                {
+                  title: "Mi Perfil",
+                  styles: "mb-2",
+                  href: "/hub/my-profile",
+                },
+              ]}
+            />
+
+            <li className="my-3 text-xl">
+              {cartItemsN}
+              <Link href={"/cart"}>
+                <FaCartShopping />
+              </Link>
+            </li>
+
+            <form action={logoutAction}>
+              <button type="submit">Cerrar Sesión</button>
+            </form>
+          </>
+        )}
       </ul>
     </>
   );

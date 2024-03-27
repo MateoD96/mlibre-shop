@@ -1,11 +1,15 @@
-import { FormWraper } from "../components";
+"use client";
+
+import { FormWraper, LabelForm } from "../components";
 import { MdEmail } from "react-icons/md";
 import { FaClipboardUser } from "react-icons/fa6";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { LabelForm } from "../components";
 import { registerAction } from "../lib/actions";
+import { useForm } from "react-hook-form";
 
 export default function RegistrationPage() {
+  const { register } = useForm();
+
   return (
     <FormWraper>
       <h3 className=" text-center text-lg font-medium">
@@ -13,9 +17,11 @@ export default function RegistrationPage() {
       </h3>
 
       <form action={registerAction} className=" mt-6">
-        <LabelForm type="email" name="email" title="Agrega tu e-mail" required>
+        <LabelForm type="email" title="Agrega tu e-mail" name="email" required>
           <MdEmail className="text-blue-500 text-xl" />
         </LabelForm>
+        {/* 
+        <input type="text" {...register("email")} /> */}
 
         <LabelForm type="text" name="username" title="Elige tu nombre" required>
           <FaClipboardUser className="text-blue-500 text-xl" />

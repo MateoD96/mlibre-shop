@@ -1,3 +1,5 @@
+"use client";
+
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
 import { FormWraper, LabelForm } from "../components";

@@ -1,13 +1,7 @@
 import { CartItem } from "@/app/lib/definitions";
 import { operationsQty } from "../lib/actions";
 
-export async function QtyUpdate({
-  item,
-  token,
-}: {
-  item: CartItem;
-  token: string;
-}) {
+export function QtyUpdate({ item, token }: { item: CartItem; token: string }) {
   const sumaQty = operationsQty.bind(null, item, token, "increment");
   const restaQty = operationsQty.bind(null, item, token, "decrement");
 
