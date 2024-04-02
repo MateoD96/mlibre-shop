@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { verifyAuth } from "./app/(routes)/hub/lib/auth";
 
 export const config = {
-  matcher: ["/hub/:path*", "/cart"],
+  matcher: ["/hub/:path*", "/cart/:path*"],
 };
 
 export async function middleware(request: NextRequest) {

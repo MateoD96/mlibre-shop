@@ -25,8 +25,8 @@ export function LabelForm({
       <input
         className="outline-none border-2 border-yellow-100 px-2 py-1 rounded-md"
         type={type}
-        id={name}
         name={name}
+        id={name}
         required={required}
       />
     </div>

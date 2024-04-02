@@ -22,12 +22,7 @@ export const getData = async <T>(
       headers: { ...options },
     });
 
-    if (!res.ok) {
-      throw new Error(`Ups,Ocurrio un error al obtener los datos`);
-    }
-
     const data = await res.json();
-
     return data as T;
   } catch (error) {
     console.log(error);

@@ -113,7 +113,7 @@ export const MobileBar = memo(({ categories, userVerify }: Props) => {
                     </Link>
                   </li>
 
-                  <form action={logoutAction}>
+                  <form action={logoutAction} className="mx-2">
                     <button>Cerrar Sesión</button>
                   </form>
                 </>
@@ -188,8 +188,10 @@ export const DesktopBar = memo(({ categories, userVerify }: Props) => {
               ]}
             />
 
-            <li className="my-3 text-xl">
-              {cartItemsN}
+            <li className="my-3 mx-2 text-xl relative">
+              <span className=" text-xs absolute -top-3 left-2">
+                {cartItemsN && cartItemsN > 0 ? cartItemsN : ""}
+              </span>
               <Link href={"/cart"}>
                 <FaCartShopping />
               </Link>
@@ -240,7 +242,7 @@ function InfoNav({ items }: InfoItems) {
   return (
     <>
       {items.map((item) => (
-        <li key={item.title} className={item.styles}>
+        <li key={item.title} className=" ml-3">
           <Link href={item.href}>{item.title}</Link>
         </li>
       ))}

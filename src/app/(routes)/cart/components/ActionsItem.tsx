@@ -1,5 +1,6 @@
 import { CartItem } from "@/app/lib/definitions";
 import { deleteItemCart } from "../lib/actions";
+import Link from "next/link";
 
 function ButtonAction({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +9,6 @@ function ButtonAction({ children }: { children: React.ReactNode }) {
     </button>
   );
 }
-
 export function ActionsItem({
   item,
   token,
@@ -24,9 +24,14 @@ export function ActionsItem({
         <ButtonAction>Eliminar</ButtonAction>
       </form>
 
-      <form>
-        <ButtonAction>Comprar Ahora</ButtonAction>
-      </form>
+      <div>
+        <Link
+          href={`/cart/checkout?buyItems=${item.id}`}
+          className="text-sm text-blue-600 font-medium mx-1"
+        >
+          Comprar Ahora
+        </Link>
+      </div>
     </div>
   );
 }

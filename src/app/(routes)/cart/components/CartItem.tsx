@@ -23,10 +23,10 @@ export function ItemCart({ item, token }: { item: CartItem; token: string }) {
           <ActionsItem item={item} token={token} />
         </div>
 
-        <QtyUpdate item={item} token={token}/>
+        <QtyUpdate item={item} token={token} />
 
         <div>
-          <p>{item.subtotal}</p>
+          <p>${item.subtotal}</p>
         </div>
       </div>
     </div>
