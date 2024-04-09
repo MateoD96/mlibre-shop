@@ -1,5 +1,5 @@
 interface PropsLabel {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title: string;
   type: string;
   name: string;

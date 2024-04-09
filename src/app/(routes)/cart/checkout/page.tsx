@@ -2,6 +2,7 @@ import { api } from "@/app/lib/data";
 import { cookies } from "next/headers";
 import { getBuyProduct } from "../lib/data";
 import { notFound } from "next/navigation";
+import { Check } from "../components";
 
 export const dynamic = "force-dynamic";
 
@@ -30,9 +31,9 @@ export default async function CheckoutPage({
   }
 
   return (
-    <>
-      <div>{buyProducts && JSON.stringify(buyProducts)}</div>
-      <div>{buyProduct && JSON.stringify(buyProduct.data)}</div>
-    </>
+    <Check
+      uniqueProduct={buyProduct}
+      cartProducts={buyProducts?.carrito.cart_items}
+    />
   );
 }

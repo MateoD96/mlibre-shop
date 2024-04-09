@@ -1,14 +1,5 @@
 import { getData } from "@/app/lib/utils";
-
-interface BuyItem {
-  data: {
-    id: number;
-    attributes: {
-      cantidad: number;
-      subtotal: number;
-    };
-  };
-}
+import { BuyItem } from "./interfaces";
 
 export async function getBuyProduct(idItem: string, token: string) {
   const res =
