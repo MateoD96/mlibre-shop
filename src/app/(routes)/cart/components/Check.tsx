@@ -1,25 +1,26 @@
 import { CartItem } from "@/app/lib/definitions";
-import { BuyItem } from "../lib/interfaces";
 import { BuySummary, CheckInfoUser } from "./index";
 import { Wrapper } from "@/app/components";
 
 interface Props {
-  uniqueProduct?: BuyItem | null;
+  uniqueCartItem?: CartItem | null;
   cartProducts?: CartItem[] | null;
 }
 
-export function Check({ uniqueProduct, cartProducts }: Props) {
+export function Check({ uniqueCartItem, cartProducts }: Props) {
   return (
     <Wrapper>
       <div className=" md:flex justify-between">
-        <CheckInfoUser />
+        {/*TODO: VALIDAR SI EL USUARIO YA TIENE SUS DATOS PERSONALES GUARDADOS */}
+        <CheckInfoUser products={uniqueCartItem || cartProducts} />
+
         <BuySummary
           summaryProducts={{
             cant:
-              uniqueProduct?.data.attributes.cantidad ??
+              uniqueCartItem?.cantidad ??
               cartProducts?.reduce((acc, elem) => (acc += elem.cantidad), 0),
             total:
-              uniqueProduct?.data.attributes.subtotal ??
+              uniqueCartItem?.subtotal ??
               cartProducts?.reduce((acc, elm) => (acc += elm.subtotal), 0),
           }}
         />

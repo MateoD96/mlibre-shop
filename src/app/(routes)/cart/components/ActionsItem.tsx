@@ -26,7 +26,7 @@ export function ActionsItem({
 
       <div>
         <Link
-          href={`/cart/checkout?buyItems=${item.id}`}
+          href={`/cart/checkout?item=${item.id}`}
           className="text-sm text-blue-600 font-medium mx-1"
         >
           Comprar Ahora

@@ -38,7 +38,7 @@ export function Cart({ items, token }: CartProps) {
       >
         <div className=" mt-4">
           <button
-            onClick={() => router.push("/cart/checkout?buyItems=cart")}
+            onClick={() => router.push("/cart/checkout")}
             className=" w-full p-3 rounded-md bg-blue-500 text-center text-white font-bold "
           >
             Continuar compra

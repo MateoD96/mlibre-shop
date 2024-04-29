@@ -1,11 +1,21 @@
 "use client";
 
 import styles from "./checkForm.module.css";
-import { useEffect, useState } from "react";
+import { SiMercadopago } from "react-icons/si";
+import { MdOutlinePayment } from "react-icons/md";
+import { CiCreditCard1 } from "react-icons/ci";
+import React, { useEffect, useState } from "react";
 import { departamentos } from "../lib/globals";
 import { useForm } from "react-hook-form";
 import { ErrorForm } from "@/app/components";
-import { AddresData, CheckData } from "../lib/interfaces";
+import {
+  AddresData,
+  CheckData,
+  DataPayment,
+  ProductsPay,
+} from "../lib/interfaces";
+import SelectPaymentMethod from "./reuse/SelectPaymentMethod";
+import { createOrder } from "../checkout/lib/actions";
 
 interface FormAddresDat {
   actionForm: (dat: AddresData) => void;
@@ -198,31 +208,94 @@ function FormAddres({ actionForm, actionStep, defaultValues }: FormAddresDat) {
 
 /////////////////////////
 
-function CheckPaymentInfo({
+function CheckPaymentMethod({
   actionStep,
+  dataPayment,
 }: {
   actionStep: (step: string) => void;
+  dataPayment: DataPayment;
 }) {
+  const [method, setMethod] = useState("mpago");
+
+  const orderAction = createOrder.bind(null, dataPayment);
+
   return (
-    <div>
-      <h1>Check</h1>
-      <button onClick={() => actionStep("checkAddres")}>Back</button>
-      <button>Next</button>
+    <div className=" w-full lg:w-3/5">
+      <h1 className=" font-bold text-2xl my-6 text-gray-600">
+        ¿Cómo quieres pagar?
+      </h1>
+
+      <div>
+        <h4 className="flex items-center font-bold mb-6">
+          ¿ Como quieres pagar ?
+          <span className="mx-2 text-blue-600 text-3xl">
+            <SiMercadopago />
+          </span>
+        </h4>
+
+        <form action={method === "mpago" ? orderAction : ""}>
+          <SelectPaymentMethod
+            selectFn={setMethod}
+            val="mpago"
+            method={method}
+            checked={method === "mpago" ? true : false}
+          >
+            <div className="flex items-center">
+              <span className="mx-6 text-blue-500 text-3xl bg-gray-100 p-2 rounded-[50%]">
+                <CiCreditCard1 />
+              </span>
+              <div>
+                <p className=" text-green-500">Con Mercado pago</p>
+                <p>Realiza tu pago ahora mismo con tu cuenta de mercadopago</p>
+              </div>
+            </div>
+          </SelectPaymentMethod>
+
+          <SelectPaymentMethod
+            selectFn={setMethod}
+            val="paypal"
+            method={method}
+          >
+            <div className=" flex items-center">
+              <span className=" mx-6 text-blue-500 text-3xl bg-gray-100 p-2 rounded-[50%]">
+                <MdOutlinePayment />
+              </span>
+              <div>
+                <p className=" text-green-500">Con paypal</p>
+                <p>Ya puedes realizar tu pago mediante Paypal</p>
+              </div>
+            </div>
+          </SelectPaymentMethod>
+
+          <button>Continuar</button>
+        </form>
+
+        <button onClick={() => actionStep("back")}>Atrás</button>
+      </div>
     </div>
   );
 }
 
 //////////////////////////////////////
 
-export function CheckInfoUser() {
+export function CheckInfoUser({ products }: ProductsPay) {
   const [stepInfo, setStepInfo] = useState("addres");
-  const [checkData, setCheckData] = useState<CheckData | null>();
+  const [checkData, setCheckData] = useState<CheckData>({} as CheckData);
 
+  //TODO: guardar los datos del usuario en la bd
   const setAddresData = (data: AddresData) =>
     setCheckData({ addresData: data });
 
   if (stepInfo === "checkPayment") {
-    return <CheckPaymentInfo actionStep={setStepInfo} />;
+    return (
+      <CheckPaymentMethod
+        actionStep={setStepInfo}
+        dataPayment={{
+          dataClient: checkData.addresData,
+          productsPay: products,
+        }}
+      />
+    );
   }
 
   return (
