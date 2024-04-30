@@ -1,29 +1,63 @@
 import { CartItem } from "@/app/lib/definitions";
 import { BuySummary, CheckInfoUser } from "./index";
 import { Wrapper } from "@/app/components";
+import { api } from "@/app/lib/data";
+import { CheckPaymentMethod } from "./CheckInfoUser";
 
-interface Props {
-  uniqueCartItem?: CartItem | null;
-  cartProducts?: CartItem[] | null;
+interface CheckBuy {
+  checkProds: {
+    uniqueItem?: CartItem | null;
+    cartProducts?: CartItem[] | null;
+  };
+  tokenUser: string;
 }
 
-export function Check({ uniqueCartItem, cartProducts }: Props) {
+export async function Check({ checkProds, tokenUser }: CheckBuy) {
+  const data = await api.getMe(tokenUser!, "?populate[cliente]=cliente");
+
   return (
     <Wrapper>
       <div className=" md:flex justify-between">
-        {/*TODO: VALIDAR SI EL USUARIO YA TIENE SUS DATOS PERSONALES GUARDADOS */}
-        <CheckInfoUser products={uniqueCartItem || cartProducts} />
+        {/* Validamos si el Usuario ya tiene datos guardados */}
 
-        <BuySummary
-          summaryProducts={{
-            cant:
-              uniqueCartItem?.cantidad ??
-              cartProducts?.reduce((acc, elem) => (acc += elem.cantidad), 0),
-            total:
-              uniqueCartItem?.subtotal ??
-              cartProducts?.reduce((acc, elm) => (acc += elm.subtotal), 0),
-          }}
-        />
+        {data.cliente?.id ? (
+          <CheckPaymentMethod
+            dataPayment={{
+              products: checkProds.cartProducts || checkProds.uniqueItem,
+            }}
+          />
+        ) : (
+          <CheckInfoUser
+            products={checkProds.uniqueItem || checkProds.cartProducts}
+            clientId={data.id!}
+          />
+        )}
+
+        {/* ///////////////////////// */}
+
+        {checkProds.uniqueItem && (
+          <BuySummary
+            summaryProducts={{
+              cant: checkProds.uniqueItem.cantidad,
+              total: checkProds.uniqueItem.subtotal,
+            }}
+          />
+        )}
+
+        {checkProds.cartProducts && (
+          <BuySummary
+            summaryProducts={{
+              cant: checkProds.cartProducts?.reduce(
+                (acc, elem) => (acc += elem.cantidad),
+                0
+              ),
+              total: checkProds.cartProducts?.reduce(
+                (acc, elm) => (acc += elm.subtotal),
+                0
+              ),
+            }}
+          />
+        )}
       </div>
     </Wrapper>
   );

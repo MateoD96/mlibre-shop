@@ -8,22 +8,16 @@ import React, { useEffect, useState } from "react";
 import { departamentos } from "../lib/globals";
 import { useForm } from "react-hook-form";
 import { ErrorForm } from "@/app/components";
-import {
-  AddresData,
-  CheckData,
-  DataPayment,
-  ProductsPay,
-} from "../lib/interfaces";
+import { AddresData, CheckData, ProductsPay } from "../lib/interfaces";
 import SelectPaymentMethod from "./reuse/SelectPaymentMethod";
-import { createOrder } from "../checkout/lib/actions";
+import { createClient, createOrder } from "../checkout/lib/actions";
 
 interface FormAddresDat {
-  actionForm: (dat: AddresData) => void;
-  actionStep: (step: string) => void;
+  actionForm: (dat: AddresData) => Promise<unknown>;
   defaultValues?: AddresData;
 }
 
-function FormAddres({ actionForm, actionStep, defaultValues }: FormAddresDat) {
+function FormAddres({ actionForm, defaultValues }: FormAddresDat) {
   const [depSelect, setDepSelect] = useState("");
   const [locations, setLocations] = useState<string[]>([]);
 
@@ -35,9 +29,8 @@ function FormAddres({ actionForm, actionStep, defaultValues }: FormAddresDat) {
   } = useForm({ defaultValues });
 
   // action form
-  const onSubmit = handleSubmit((data) => {
-    actionForm(data as AddresData);
-    actionStep("checkPayment");
+  const onSubmit = handleSubmit(async (data) => {
+    await actionForm(data);
   });
 
   // select dep logic
@@ -48,7 +41,11 @@ function FormAddres({ actionForm, actionStep, defaultValues }: FormAddresDat) {
   return (
     <div className="md:w-4/6">
       <h2 className=" my-6 text-xl">Agregar domicilio</h2>
-      <form onSubmit={onSubmit} className={styles.form} autoComplete="off">
+      <form
+        action={() => onSubmit()}
+        className={styles.form}
+        autoComplete="off"
+      >
         <div className=" p-4 bg-white mb-4 rounded-md">
           <div className=" my-6">
             <label htmlFor="namecomplete">Nombre y apellido</label>
@@ -208,12 +205,12 @@ function FormAddres({ actionForm, actionStep, defaultValues }: FormAddresDat) {
 
 /////////////////////////
 
-function CheckPaymentMethod({
+export function CheckPaymentMethod({
   actionStep,
   dataPayment,
 }: {
-  actionStep: (step: string) => void;
-  dataPayment: DataPayment;
+  actionStep?: (step: string) => void;
+  dataPayment: ProductsPay;
 }) {
   const [method, setMethod] = useState("mpago");
 
@@ -270,7 +267,9 @@ function CheckPaymentMethod({
           <button>Continuar</button>
         </form>
 
-        <button onClick={() => actionStep("back")}>Atrás</button>
+        {actionStep && (
+          <button onClick={() => actionStep("back")}>Atrás</button>
+        )}
       </div>
     </div>
   );
@@ -278,30 +277,17 @@ function CheckPaymentMethod({
 
 //////////////////////////////////////
 
-export function CheckInfoUser({ products }: ProductsPay) {
-  const [stepInfo, setStepInfo] = useState("addres");
+export function CheckInfoUser({ clientId }: ProductsPay) {
   const [checkData, setCheckData] = useState<CheckData>({} as CheckData);
 
-  //TODO: guardar los datos del usuario en la bd
-  const setAddresData = (data: AddresData) =>
-    setCheckData({ addresData: data });
-
-  if (stepInfo === "checkPayment") {
-    return (
-      <CheckPaymentMethod
-        actionStep={setStepInfo}
-        dataPayment={{
-          dataClient: checkData.addresData,
-          productsPay: products,
-        }}
-      />
-    );
-  }
+  // guardar los datos del usuario en la bd
+  const setAddresData = async (data: AddresData) => {
+    await createClient(data, clientId!);
+  };
 
   return (
     <FormAddres
       actionForm={setAddresData}
-      actionStep={setStepInfo}
       defaultValues={checkData?.addresData}
     />
   );

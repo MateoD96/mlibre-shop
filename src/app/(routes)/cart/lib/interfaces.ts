@@ -35,10 +35,10 @@ export interface CheckData {
 export type productP = CartItem | CartItem[] | null | undefined;
 
 export interface ProductsPay {
+  clientId?: number;
   products: productP;
 }
 
 export interface DataPayment {
-  dataClient: AddresData;
   productsPay: productP;
 }

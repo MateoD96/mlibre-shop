@@ -36,8 +36,11 @@ export default async function CheckoutCartPage({
 
   return (
     <Check
-      uniqueCartItem={itemProduct()}
-      cartProducts={buyProducts?.carrito.cart_items}
+      checkProds={{
+        cartProducts: !itemProduct() ? buyProducts?.carrito.cart_items : null,
+        uniqueItem: itemProduct(),
+      }}
+      tokenUser={currentUserToken!}
     />
   );
 }
