@@ -5,17 +5,8 @@ import { postData } from "@/app/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createNewCart } from "../../cart/lib/actions";
-
-interface Register {
-  username: string;
-  email: string;
-  password: string;
-}
-
-interface Login {
-  identifier: string;
-  password: string;
-}
+import { RegisterUser } from "../registration/validation/registerSchema";
+import { LoginUser } from "../login/validation/loginSchema";
 
 const apiAuth = {
   baseUrl: `${process.env.URL_LOCAL}/auth/local`,
@@ -32,18 +23,34 @@ const apiAuth = {
   },
 };
 
-export async function registerAction(formData: FormData) {
-  const { insert } = postData();
-  //TODO: validate
-  const data: Register = {
-    username: formData.get("username") as string,
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+export type State = {
+  errors?: {
+    email?: string[];
+    username?: string[];
+    password?: string[];
   };
+  message?: string | null;
+};
+
+export async function registerAction(prevState: State, formData: FormData) {
+  const { insert } = postData();
+
+  const validateFields = RegisterUser.safeParse({
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validateFields.success) {
+    return {
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "",
+    };
+  }
 
   const { jwt, user, error } = await insert(
     `${apiAuth.baseUrl}/register`,
-    data
+    validateFields.data
   );
 
   const me: Me = user;
@@ -56,28 +63,41 @@ export async function registerAction(formData: FormData) {
     redirect("/hub/my-profile");
   }
 
-  console.log(error);
-
-  //TODO: indicar el error de autenticación al usuario
+  return {
+    message: error.message,
+  };
 }
 
 /////////////////////////////////////////
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(prevState: State, formData: FormData) {
   const { insert } = postData();
 
   //TODO: Validate
-  const loginDat: Login = {
-    identifier: formData.get("identifier") as string,
-    password: formData.get("password") as string,
-  };
+  const validateFields = LoginUser.safeParse({
+    identifier: formData.get("identifier"),
+    password: formData.get("password"),
+  });
 
-  const { jwt, error } = await insert(apiAuth.baseUrl, loginDat);
+  if (!validateFields.success) {
+    return {
+      errors: validateFields.error.flatten().fieldErrors,
+      message: "",
+    };
+  }
+
+  const { jwt, error } = await insert(apiAuth.baseUrl, validateFields.data);
 
   if (!error) {
     apiAuth.cookieAuth(jwt);
     redirect("/hub/my-profile");
   }
+  return {
+    message: error.message,
+  };
 }
 
-export async function logoutAction() {}
+export async function logoutAction() {
+  cookies().delete("currentUser");
+  redirect("/signup");
+}

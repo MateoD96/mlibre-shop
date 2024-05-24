@@ -123,6 +123,13 @@ export interface Me {
     id: number;
     cart_items: CartItem[];
   };
+  cliente?: Client;
+}
+
+export interface Client {
+  id: number | string;
+  addresInfo: {};
+  personalInfo: {};
 }
 
 export interface ProdCart {
@@ -130,7 +137,7 @@ export interface ProdCart {
   title: string;
   stock: number;
   price: number;
-  image: {
+  image?: {
     formats: Formats;
   };
 }

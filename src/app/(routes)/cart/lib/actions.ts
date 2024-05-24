@@ -1,11 +1,12 @@
 "use server";
 
-import { postData } from "@/app/lib/utils";
+import { deleteData, postData } from "@/app/lib/utils";
 import { cookies } from "next/headers";
 import { verifyAuth } from "../../hub/lib/auth";
 import { redirect } from "next/navigation";
 import { api } from "@/app/lib/data";
 import { CartItem } from "@/app/lib/definitions";
+import { revalidateTag } from "next/cache";
 
 interface ProdInfo {
   prodId?: number;
@@ -99,4 +100,38 @@ export async function createNewCart(uuid: number, jwt: string) {
   await insert(`${process.env.URL_LOCAL}/carritos`, cart, {
     Authorization: `Bearer ${jwt}`,
   });
+}
+
+///////////////////////////////////
+
+export async function deleteItemCart(id: number, token: string) {
+  await deleteData(`${process.env.URL_LOCAL}/cart-items/${id}`, {
+    Authorization: `Bearer ${token}`,
+  });
+  revalidateTag("me");
+}
+
+////////////////////
+
+export async function operationsQty(
+  item: CartItem,
+  token: string,
+  operation: string
+) {
+  const { update } = postData();
+
+  const updated = {
+    data: {
+      cantidad:
+        operation === "increment" ? (item.cantidad += 1) : (item.cantidad -= 1),
+      subtotal: item.cantidad * item.producto.price,
+    },
+  };
+
+  if (item.cantidad <= item.producto.stock && item.cantidad > 0) {
+    await update(`${process.env.URL_LOCAL}/cart-items/${item.id}`, updated, {
+      Authorization: `Bearer ${token}`,
+    });
+    revalidateTag("me");
+  }
 }

@@ -7,6 +7,7 @@ import { DatumProduct } from "../../shop/[...filtersProducts]/lib/definitions";
 import { useState } from "react";
 import { useToggle } from "@/app/hooks";
 import { insertNewItemCart } from "../../cart/lib/actions";
+import { useRouter } from "next/navigation";
 
 interface PropsProd {
   product: DatumProduct;
@@ -68,10 +69,11 @@ function BuyProduct({
   prodInfo,
   prodId,
 }: {
-  prodInfo: { stock: number; price: number };
+  prodInfo: { stock: number; price: number; slug: string };
   prodId: number;
 }) {
   const [buyCant, setBuyCant] = useState(1);
+  const { push } = useRouter();
   const newItemAction = insertNewItemCart.bind(
     null,
     { prodId, stock: prodInfo.stock, price: prodInfo.price },
@@ -95,14 +97,13 @@ function BuyProduct({
 
       {/* Action buy product */}
       <div className=" mt-6">
-        <form action={""}>
-          <button
-            type="submit"
-            className="p-2 bg-blue-500 block mb-3 w-full text-center rounded-md text-white"
-          >
-            Comprar
-          </button>
-        </form>
+        <button
+          type="submit"
+          className="p-2 bg-blue-500 block mb-3 w-full text-center rounded-md text-white"
+          onClick={() => push(`/${prodInfo.slug}/checkout?qty=${buyCant}`)}
+        >
+          Comprar
+        </button>
 
         {/* Action add Cart */}
         <form action={newItemAction}>

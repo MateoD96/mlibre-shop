@@ -1,11 +1,11 @@
-import { Me, Subcategories } from "./definitions";
+import { Categories, Me, Subcategories } from "./definitions";
 import { getData } from "./utils";
 
 export const api = {
   baseUrl: `${process.env.URL_LOCAL}`,
 
   async getCategories() {
-    const data = await getData(
+    const data = await getData<Categories>(
       `${this.baseUrl}/categorias?populate[sub_categorias]=sub_categorias`
     );
     return data;
@@ -21,8 +21,8 @@ export const api = {
   async getMe(currentUserToken: string, paramsUrl?: string) {
     const data = await getData<Me>(
       `${this.baseUrl}/users/me${paramsUrl || ""}`,
-
-      { Authorization: `Bearer ${currentUserToken}` }
+      { Authorization: `Bearer ${currentUserToken}` },
+      { next: { tags: ["me"] } }
     );
 
     return data;
